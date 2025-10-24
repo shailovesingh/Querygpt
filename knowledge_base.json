@@ -1,0 +1,22 @@
+{
+    "Mobility": {
+        "description": "Contains data related to rides, vehicles, and real-time trip details.",
+        "tables": {
+            "trips": {
+                "schema": "trip_id (INT), driver_id (INT), city (VARCHAR), distance_miles (FLOAT), fare_usd (FLOAT), trip_status (VARCHAR), trip_date (DATE)",
+                "rules": "The column `trip_status` must be 'completed' to count a successful trip. Always filter by `trip_date` when a time frame is provided.",
+                "sample_query": "SELECT count(trip_id) FROM trips WHERE trip_date = '2025-10-24' AND trip_status = 'completed';"
+            }
+        }
+    },
+    "Core Services": {
+        "description": "Contains HR, payroll, and static user/driver data.",
+        "tables": {
+            "drivers": {
+                "schema": "driver_id (INT), name (VARCHAR), license_status (VARCHAR), vehicle_make (VARCHAR), hire_date (DATE), annual_bonus_target (INT), current_rating (FLOAT), long_term_retention_score (FLOAT)",
+                "rules": "To check for an active driver, filter on `license_status` = 'active'. The `long_term_retention_score` column is rarely needed.",
+                "sample_query": "SELECT name, current_rating FROM drivers WHERE license_status = 'active';"
+            }
+        }
+    }
+}

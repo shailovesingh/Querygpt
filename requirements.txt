@@ -1,0 +1,8 @@
+streamlit
+langchain
+langchain-groq
+langgraph
+langchain-community
+pydantic
+python-dotenv
+duckdb # Using a simple, fast, in-process database
