@@ -1,4 +1,3 @@
-# app.py
 import streamlit as st
 import pandas as pd
 from agents.workflow import build_query_graph
@@ -41,7 +40,7 @@ else:
                 final_answer=""
             )
             
-            # --- EXECUTION ---
+            # EXECUTION
             start_time = time.time()
             st.session_state['execution_log'] = []
             
@@ -53,7 +52,7 @@ else:
                 st.session_state['execution_log'].append((node_name, new_state))
 
             total_time = time.time() - start_time
-            # --- END EXECUTION ---
+            # END EXECUTION
             
             st.subheader("Final Result")
             st.success(f"**Final Answer:** {st.session_state['execution_log'][-1][1]['final_answer']}")
