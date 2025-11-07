@@ -7,13 +7,13 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-# Use a powerful Groq model for the complex reasoning (Query Generation)
+# Use Groq model for the complex reasoning (Query Generation)
 llm_main = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.1, api_key=os.getenv("GROQ_API_KEY"))
-# Use a faster/smaller Groq model for simple routing/pruning
+# Use a faster/smaller simple routing/pruning
 llm_pruner = ChatGroq(model="llama-3.3-70b-versatile", temperature=0, api_key=os.getenv("GROQ_API_KEY"))
 
 
-# --- 1. Intent Agent (Router) ---
+# Intent Agent (Router)
 def route_to_workspace(state: AgentState) -> dict:
     """Classifies the user question to a 'Workspace' (Domain Routing)."""
     question = state["user_question"]
@@ -39,7 +39,7 @@ def route_to_workspace(state: AgentState) -> dict:
     return {"workspace_name": workspace}
 
 
-# --- 2. Table/RAG Agent (Pruning Step 1) ---
+# Table/RAG Agent (Pruning Step 1)
 def table_prune_agent(state: AgentState) -> dict:
     """Uses LLM to select only the relevant tables from the full schema/context."""
     context_schema = state["context_schema"]
@@ -63,14 +63,14 @@ def table_prune_agent(state: AgentState) -> dict:
     relevant_tables = [t.strip() for t in response.split(',') if t.strip()]
     
     # This is critical for the next step to work correctly
-    # For this demo, we can manually ensure the tables are valid
+    # we can manually ensure the tables are valid
     valid_tables = [t for t in relevant_tables if t in ['trips', 'drivers']]
     
     print(f"[Agent: Table Pruner] Selected Tables: {valid_tables}")
     return {"relevant_tables": valid_tables}
 
 
-# --- 3. Column Prune Agent (Pruning Step 2: Creates the Final, Minimized Schema) ---
+# Column Prune Agent (Pruning Step 2: Creates the Final, Minimized Schema)
 def column_prune_agent(state: AgentState) -> dict:
     """Filters the schema to only include necessary columns."""
     context_schema = state["context_schema"] # Full knowledge base
@@ -91,7 +91,7 @@ def column_prune_agent(state: AgentState) -> dict:
     return {"pruned_schema": pruned_schema}
 
 
-# --- 4. Query Generation Agent ---
+# Query Generation Agent
 def query_generation_agent(state: AgentState) -> dict:
     """Generates the final SQL query using the minimized context (Groq llama3-70b)."""
     pruned_schema = state["pruned_schema"]
@@ -129,7 +129,7 @@ def query_generation_agent(state: AgentState) -> dict:
     return {"sql_query": sql_query}
 
 
-# --- 5. Final Answer Agent (Synthesis) ---
+# Final Answer Agent (Synthesis)
 def final_answer_agent(state: AgentState) -> dict:
     """Analyzes the DB result and synthesizes the final answer for the user."""
     # Retrieve all necessary keys from the current state
@@ -157,7 +157,6 @@ def final_answer_agent(state: AgentState) -> dict:
         response = llm_pruner.invoke(prompt_str).content
         final_answer = response.strip()
     
-    # CRITICAL FIX: Return a dictionary containing the final answer AND the query/result
     # This ensures 'sql_query' remains in the state for the final log step.
     return {
         "final_answer": final_answer,
@@ -167,7 +166,7 @@ def final_answer_agent(state: AgentState) -> dict:
     }
 
 
-# --- Conditional Edges ---
+# Conditional Edges
 def check_for_error(state: AgentState) -> str:
     """Checks if the query execution resulted in an error."""
     if state["db_result"].startswith("SQL ERROR"):
@@ -176,7 +175,7 @@ def check_for_error(state: AgentState) -> str:
     return "success"
 
 
-# --- Build the Graph ---
+# Build the Graph
 def build_query_graph():
     """Defines and compiles the LangGraph workflow."""
     workflow = StateGraph(AgentState)

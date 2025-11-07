@@ -1,7 +1,7 @@
 import duckdb
 import pandas as pd
 import json
-import os # Import os for file check
+import os
 
 DATABASE_FILE = "uber_trips.db"
 KNOWLEDGE_BASE_FILE = "knowledge_base.json"

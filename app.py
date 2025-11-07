@@ -10,8 +10,8 @@ import os
 load_dotenv()
 graph = build_query_graph()
 
-st.set_page_config(layout="wide", page_title="QueryGPT: Multi-Agent Text-to-SQL Demo")
-st.title("🤖 QueryGPT: Uber-Inspired Multi-Agent Text-to-SQL")
+st.set_page_config(layout="wide", page_title="QueryGPT: Multi-Agent Text-to-SQL")
+st.title("🤖 QueryGPT: Multi-Agent Text-to-SQL")
 st.markdown("A prototype demonstrating high-performance, contextual query generation using **LangGraph** (Orchestration) and **Groq** (Speed).")
 
 if not os.getenv("GROQ_API_KEY"):
@@ -41,7 +41,7 @@ else:
                 final_answer=""
             )
             
-            # --- EXECUTION ---
+            # EXECUTION
             start_time = time.time()
             st.session_state['execution_log'] = []
             
@@ -53,7 +53,7 @@ else:
                 st.session_state['execution_log'].append((node_name, new_state))
 
             total_time = time.time() - start_time
-            # --- END EXECUTION ---
+            # END EXECUTION
             
             st.subheader("Final Result")
             st.success(f"**Final Answer:** {st.session_state['execution_log'][-1][1]['final_answer']}")

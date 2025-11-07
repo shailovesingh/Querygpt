@@ -11,11 +11,10 @@ load_dotenv()
 DATABASE_FILE = "uber_trips.db"
 KNOWLEDGE_BASE_FILE = "knowledge_base.json"
 
-# --- LLM Setup for Tools ---
-# Use a fast, small model for internal tool/routing decisions
+# LLM Setup for Tools
 llm_tools = ChatGroq(model="llama-3.3-70b-versatile", temperature=0, api_key=os.getenv("GROQ_API_KEY"))
 
-# --- Database Tool ---
+# Database Tool
 def get_db_connector():
     """Initializes the DuckDB connector."""
     return duckdb.connect(database=DATABASE_FILE)
@@ -42,7 +41,7 @@ def execute_sql_query(state: AgentState) -> dict:
     print(f"--- DB Result: {db_result[:100]}... ---")
     return {"db_result": db_result}
 
-# --- RAG/Knowledge Base Tool ---
+# RAG/Knowledge Base Tool
 def retrieve_knowledge_base(state: AgentState) -> dict:
     """Retrieves relevant schema and rules (RAG) based on the workspace."""
     
