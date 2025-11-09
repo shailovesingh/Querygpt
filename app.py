@@ -11,7 +11,7 @@ graph = build_query_graph()
 
 st.set_page_config(layout="wide", page_title="QueryGPT: Multi-Agent Text-to-SQL")
 st.title("🤖 QueryGPT: Multi-Agent Text-to-SQL")
-st.markdown("A prototype demonstrating high-performance, contextual query generation using **LangGraph** (Orchestration) and **Groq** (Speed).")
+st.markdown("A Contextual query generation using **LangGraph** (Orchestration) and **Groq** (Speed).")
 
 if not os.getenv("GROQ_API_KEY"):
     st.error("Please set the `GROQ_API_KEY` in your `.env` file.")
